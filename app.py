@@ -61,6 +61,10 @@ def handle_text_message(event):
     #日付型→文字列型
 
     #dby、yd、td、totalの定義
+    dby = 0
+    yd = 0
+    td = 0
+    total = 0
 
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
@@ -94,46 +98,46 @@ def handle_text_message(event):
                 layout = 'vertical',
                 contents = [
                     #title
-                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xxl'),
-                    SeparatorComponent(margin = 'xxl'),
+                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xl'),
+                    SeparatorComponent(),
                     #three days money
                     BoxComponent(
                         layout = 'vertical',
-                        margin = 'xxl',
+                        margin = 'lg',
                         contents = [
                             #money of the day before yesterday
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '一昨日',size = 'sm',flex = '0',color = '#555555'),
-                                    TextComponent(text = str(dby)+'円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(dby)+'円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             ),
                             #money of the yesterday
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '昨日',size = 'sm',flex = '0',color = '#555555'),
-                                    TextComponent(text = str(yd)+'円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(yd)+'円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             ),
                             #money of the today
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '今日',size = 'sm',flex = '0',color = '#555555'),
-                                    TextComponent(text = str(td)+'円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(td)+'円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             ),
                         ],
                     ),
-                    SeparatorComponent(margin = 'xxl'),
+                    SeparatorComponent(),
                     #total money
                     BoxComponent(
                         layout = 'baseline',
                         contents = [
-                            TextComponent(text = '合計貯金額',size = 'sm',flex = '0',color = '#555555'),
-                            TextComponent(text = str(total)+'円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
+                            TextComponent(text = str(total)+'円',size = 'sm',flex = 5,color = '#111111')
                         ]
                     ),
                 ]
