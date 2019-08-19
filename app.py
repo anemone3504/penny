@@ -69,10 +69,10 @@ def handle_text_message(event):
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
         #DBにアクセスしてデータを取得する
-        sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
-        with conn.cursor() as cur:
-            cur.execute(sql) #executeメソッドでクエリを実行。
-            results = cur.fetchall()  #fetchall
+        #sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
+        #with conn.cursor() as cur:
+        #    cur.execute(sql) #executeメソッドでクエリを実行。
+        #    results = cur.fetchall()  #fetchall
         #results は 以下のようなデータフォーマットである.
         #[(1行目の1列目の属性,1行目の2列目の属性,...,1行目のn列目の属性),(2行目の1列目の属性,...,2行目のn列目の属性),...,(m行目の1列目,...,m行目のn列目)]
         #そして、m行目のn列目のアクセスしたい場合は
