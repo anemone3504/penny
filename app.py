@@ -91,7 +91,7 @@ def handle_text_message(event):
             #左から右に文章が進むように設定
             direction = 'ltr',
             body = BoxComponent(
-                layot = 'vertical',
+                layout = 'vertical',
                 contents = [
                     #title
                     TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xxl'),
