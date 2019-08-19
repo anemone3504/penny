@@ -216,8 +216,3 @@ def insert_column(value):
     sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
     with conn.cursor() as cur:
         cur.execute(sql)
-
-
-
-if __name__ == '__main__':
-    app.run()
