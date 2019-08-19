@@ -1,4 +1,5 @@
 from flask import Flask, request, abort, render_template,redirect
+
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -76,8 +77,26 @@ def handle_text_message(event):
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text in '貯金額':
         #DBにアクセスしてデータを取得する
+        sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
+        with conn.cursor() as cur:
+            cur.execute(sql) #executeメソッドでクエリを実行。
+            results = cur.fetchall()  #fetchall
+        #results は 以下のようなデータフォーマットである.
+        #[(1行目の1列目の属性,1行目の2列目の属性,...,1行目のn列目の属性),(2行目の1列目の属性,...,2行目のn列目の属性),...,(m行目の1列目,...,m行目のn列目)]
+        #そして、m行目のn列目のアクセスしたい場合は
+        #results[m][n] で可能である。
 
-
+        #こういうのも便利かも？
+        #for column in cur.ferchall():
+        #   anycode...
+        #で１行ずつタプルで情報を取り出せる。
+        
+        #使用しているテーブル情報を以下に示す。
+        # 表:record ( 
+            # 属性:id int型 auto_increment PRIMARY KEY NOT NULL, //一意性の保持のための属性
+            # 属性:value int型 //金額の情報
+            # 属性:updated_at date型 //日日の情報のみが含まれている。時刻に関する情報は含まれていない。
+        # )
 
         #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額
         buble = BubbleContainer(
@@ -200,7 +219,16 @@ def handle_unfollow(event):
     UseID = event.source.user_id
     #UserIDをデータベースから削除する
 
+conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
+conn.autocommit = True
 
+@app.route('/insert/',methods=['POST']) 
+def insert():
+    value = request.form['value']#大括弧なのに注意。
+    insert_column(value)
+    return "Insert done." #Noneを返すとstatus code が500になる。
 
-if __name__ == '__main__':
-    app.run()
+def insert_column(value):
+    sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
+    with conn.cursor() as cur:
+        cur.execute(sql)
