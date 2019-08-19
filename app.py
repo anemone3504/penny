@@ -76,8 +76,24 @@ def handle_text_message(event):
         #DBにアクセスしてデータを取得する
         sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
         with conn.cursor() as cur:
-            cur.execute(sql)
+            cur.execute(sql) #executeメソッドでクエリを実行。
+            results = cur.fetchall()  #fetchall
+        #results は 以下のようなデータフォーマットである.
+        #[(1行目の1列目の属性,1行目の2列目の属性,...,1行目のn列目の属性),(2行目の1列目の属性,...,2行目のn列目の属性),...,(m行目の1列目,...,m行目のn列目)]
+        #そして、m行目のn列目のアクセスしたい場合は
+        #results[m][n] で可能である。
 
+        #こういうのも便利かも？
+        #for column in cur.ferchall():
+        #   anycode...
+        #で１行ずつタプルで情報を取り出せる。
+        
+        #使用しているテーブル情報を以下に示す。
+        # 表:record ( 
+            # 属性:id int型 auto_increment PRIMARY KEY NOT NULL, //一意性の保持のための属性
+            # 属性:value int型 //金額の情報
+            # 属性:updated_at date型 //日日の情報のみが含まれている。時刻に関する情報は含まれていない。
+        # )
 
         #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額
         buble = BubbleContainer(
