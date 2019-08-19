@@ -23,6 +23,7 @@ from linebot.models import (
 )
 import os
 import datetime
+import psycopg2
 
 #アクセスキーの取得
 app = Flask(__name__)
