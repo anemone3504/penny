@@ -73,7 +73,7 @@ def handle_text_message(event):
     total = 0
 
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
-    if '貯金額' in text:
+    if text == '貯金額':
         #DBにアクセスしてデータを取得する
         sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
         with conn.cursor() as cur:
@@ -144,15 +144,20 @@ def handle_text_message(event):
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = '0',color = '#555555'),
                             TextComponent(text = str(total)+'円',size = 'sm',align = 'end',color = '#111111')
-                        ],
+                        ]
                     ),
-                    SeparatorComponent(margin = 'xxl'),
                 ]
-            )
+            ),
+        )
+        message = FlexSendMessage(alt_text = "hello", contents = bubble)
+        line_bot_api.reply_message(
+            event.reply_token,
+            message
         )
 
+
     #ユーザーからヘルプを表示してほしいとメッセージが送られたときのイベント
-    elif 'ヘルプ' in text:
+    elif text == 'ヘルプ':
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
