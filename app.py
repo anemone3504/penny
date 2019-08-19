@@ -57,20 +57,10 @@ def callback():
 def handle_text_message(event):
     text = event.message.text
     #日付型で日付データを取得
-    today = datetime.today()
-    yesterday = today - timedelta(days=1)
-    day_before_yesterday = today - timedelta(days=2)
 
     #日付型→文字列型
-    td_date = datetime.datetime.strftime(now_date, '%Y-%m-$d')
-    yd_date = datetime.datetime.strftime(yesterday, '%Y-%m-$d')
-    dby_date = datetime.datetime.strftime(day_before_yesterday, '%Y-%m-$d')
 
     #dby、yd、td、totalの定義
-    dby = 0
-    yd = 0
-    td = 0
-    total = 0
 
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
