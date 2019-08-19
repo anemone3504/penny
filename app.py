@@ -147,16 +147,6 @@ def handle_text_message(event):
                     ),
                     SeparatorComponent(margin = 'xxl'),
                 ]
-            ),
-            footer = BoxComponent(
-                layout = 'vertical',
-                spacing = 'sm',
-                #link for our website
-                ButtonComponent(
-                style = 'link',
-                height = 'sm',
-                action = URIAction(label = '公式サイト',uri='')
-                )
             )
         )
 
