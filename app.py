@@ -61,14 +61,18 @@ def handle_text_message(event):
     #日付型→文字列型
 
     #dby、yd、td、totalの定義
+    dby = 0
+    yd = 0
+    td = 0
+    total = 0
 
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
         #DBにアクセスしてデータを取得する
-        sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
-        with conn.cursor() as cur:
-            cur.execute(sql) #executeメソッドでクエリを実行。
-            results = cur.fetchall()  #fetchall
+        #sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
+        #with conn.cursor() as cur:
+        #    cur.execute(sql) #executeメソッドでクエリを実行。
+        #    results = cur.fetchall()  #fetchall
         #results は 以下のようなデータフォーマットである.
         #[(1行目の1列目の属性,1行目の2列目の属性,...,1行目のn列目の属性),(2行目の1列目の属性,...,2行目のn列目の属性),...,(m行目の1列目,...,m行目のn列目)]
         #そして、m行目のn列目のアクセスしたい場合は
@@ -91,49 +95,49 @@ def handle_text_message(event):
             #左から右に文章が進むように設定
             direction = 'ltr',
             body = BoxComponent(
-                layot = 'vertical',
+                layout = 'vertical',
                 contents = [
                     #title
-                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xxl'),
-                    SeparatorComponent(margin = 'xxl'),
+                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xl'),
+                    SeparatorComponent(),
                     #three days money
                     BoxComponent(
                         layout = 'vertical',
-                        margin = 'xxl',
+                        margin = 'lg',
                         contents = [
                             #money of the day before yesterday
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '一昨日',size = 'sm',flex = '0',color = '#555555'),
-                                    TextComponent(text = str(dby)+'円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(dby)+'円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             ),
                             #money of the yesterday
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '昨日',size = 'sm',flex = '0',color = '#555555'),
-                                    TextComponent(text = str(yd)+'円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(yd)+'円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             ),
                             #money of the today
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '今日',size = 'sm',flex = '0',color = '#555555'),
-                                    TextComponent(text = str(td)+'円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(td)+'円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             ),
                         ],
                     ),
-                    SeparatorComponent(margin = 'xxl'),
+                    SeparatorComponent(),
                     #total money
                     BoxComponent(
                         layout = 'baseline',
                         contents = [
-                            TextComponent(text = '合計貯金額',size = 'sm',flex = '0',color = '#555555'),
-                            TextComponent(text = str(total)+'円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
+                            TextComponent(text = str(total)+'円',size = 'sm',flex = 5,color = '#111111')
                         ]
                     ),
                 ]
