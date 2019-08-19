@@ -56,10 +56,7 @@ def callback():
 def handle_text_message(event):
     text = event.message.text
     #日付型で日付データを取得
-    days_list = []
-    i = 0
     today = datetime.today()
-    days_list = today
     yesterday = today - timedelta(days=1)
     day_before_yesterday = today - timedelta(days=2)
 
@@ -90,9 +87,9 @@ def handle_text_message(event):
         #for column in cur.ferchall():
         #   anycode...
         #で１行ずつタプルで情報を取り出せる。
-        
+
         #使用しているテーブル情報を以下に示す。
-        # 表:record ( 
+        # 表:record (
             # 属性:id int型 auto_increment PRIMARY KEY NOT NULL, //一意性の保持のための属性
             # 属性:value int型 //金額の情報
             # 属性:updated_at date型 //日日の情報のみが含まれている。時刻に関する情報は含まれていない。
@@ -222,7 +219,7 @@ def handle_unfollow(event):
 conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
 conn.autocommit = True
 
-@app.route('/insert/',methods=['POST']) 
+@app.route('/insert/',methods=['POST'])
 def insert():
     value = request.form['value']#大括弧なのに注意。
     insert_column(value)
