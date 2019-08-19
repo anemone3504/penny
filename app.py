@@ -32,7 +32,7 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-@app.route("callback",methods=['POST'])
+@app.route("/callback",methods=['POST'])
 def callback():
     signature = request.handlers['X-Line-Signature']
     body = request.get_data(app_text = True)
@@ -55,7 +55,10 @@ def callback():
 def handle_text_message(event):
     text = event.message.text
     #日付型で日付データを取得
+    days_list = []
+    i = 0
     today = datetime.today()
+    days_list = today
     yesterday = today - timedelta(days=1)
     day_before_yesterday = today - timedelta(days=2)
 
@@ -174,7 +177,20 @@ def handle_follow(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
-            text='友達追加ありがとう！\n貯金額を知りたい場合は、「貯金額」とメッセージを送ってね。\nヘルプを表示したい場合は、「ヘルプ」とメッセージを送ってね。',
+            text = "友達追加ありがとう！\n貯金額を確認したいときは下のボタンを押してね",
+            quick_reply = QuickReply(
+                items = [
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                    )
+                ]
+            )
         )
     )
 
