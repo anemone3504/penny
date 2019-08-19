@@ -73,7 +73,7 @@ def handle_text_message(event):
     total = 0
 
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
-    if text in '貯金額':
+    if '貯金額' in text:
         #DBにアクセスしてデータを取得する
         sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
         with conn.cursor() as cur:
@@ -152,7 +152,7 @@ def handle_text_message(event):
         )
 
     #ユーザーからヘルプを表示してほしいとメッセージが送られたときのイベント
-    elif text in 'ヘルプ':
+    elif 'ヘルプ' in text:
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
