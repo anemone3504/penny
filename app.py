@@ -93,8 +93,8 @@ def handle_text_message(event):
                 layout = 'vertical',
                 contents = [
                     #title
-                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xl'),
-                    SeparatorComponent(),
+                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xxl'),
+                    SeparatorComponent(margin = 'lg'),
                     #three days money
                     BoxComponent(
                         layout = 'vertical',
@@ -104,8 +104,8 @@ def handle_text_message(event):
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
+                                    TextComponent(text = '一昨日',size = 'sm',flex = 0,color = '#555555'),
+                                    TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
                                 ],
                             ),
                             #money of the yesterday
@@ -113,7 +113,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
+                                    TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
                                 ],
                             ),
                             #money of the today
@@ -121,7 +121,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
+                                    TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
                                 ],
                             )
                         ],
@@ -130,9 +130,10 @@ def handle_text_message(event):
                     #total money
                     BoxComponent(
                         layout = 'baseline',
+                        margin = 'lg',
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
+                            TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
