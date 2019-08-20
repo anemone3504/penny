@@ -110,7 +110,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = dby_str,size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = str(dby) + '円',size = 'sm',align = 'end',color = '#111111')
                                 ],
                             ),
                             #money of the yesterday
@@ -118,7 +118,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = yd_str,size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = str(yd) + '円',size = 'sm',align = 'end',color = '#111111')
                                 ],
                             ),
                             #money of the today
@@ -126,7 +126,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = td_str,size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = str(td) + '円',size = 'sm',align = 'end',color = '#111111')
                                 ],
                             )
                         ],
@@ -138,7 +138,7 @@ def handle_text_message(event):
                         margin = 'lg',
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = total_str,size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = str(total) + '円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
