@@ -109,7 +109,7 @@ def handle_postback(event):
                         margin = 'lg',
                         contents = [
                             TextComponent(text = '累計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = str(total_results[0][0])'円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = str(total_results[0][0]) + '円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
@@ -174,7 +174,7 @@ def handle_postback(event):
                         margin = 'lg',
                         contents = [
                             TextComponent(text = '累計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = str(total_results[0][0])'円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = str(total_results[0][0]) + '円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
@@ -239,7 +239,7 @@ def handle_postback(event):
                         margin = 'lg',
                         contents = [
                             TextComponent(text = '累計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = str(total_results[0][0])'円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = str(total_results[0][0]) + '円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
