@@ -55,14 +55,14 @@ def handle_text_message(event):
 
     #日付型→文字列型
 
-    #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額 の定義
-    dby = 0
-    yd = 0
-    td = 0
-    total = 0
 
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
+        #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額 の定義
+        dby = 0
+        yd = 0
+        td = 0
+        total = 0
         #DBにアクセスしてデータを取得する
         #sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
         #with conn.cursor() as cur:
@@ -89,7 +89,7 @@ def handle_text_message(event):
         dby_str = str(dby) + '円'
         yd_str = str(yd) + '円'
         td_str = str(td) + '円'
-        total = str(total) + '円'
+        total_str = str(total) + '円'
 
         bubble = BubbleContainer(
             #左から右に文章が進むように設定
