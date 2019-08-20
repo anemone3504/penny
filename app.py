@@ -42,11 +42,6 @@ def callback():
 
     try:
         handler.handle(body, signature)
-    except LineBotApiError as e:
-        print("Got exception from LINE Messaging API: %s\n" % e.message)
-        for m in e.error.details:
-            print(" %s: %s" % (m.property, m.message))
-        print("\n")
     except InvalidSignatureError:
         abort(400)
 
@@ -111,7 +106,7 @@ def handle_text_message(event):
                                 contents = [
                                     TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
                                     TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
-                                ]
+                                ],
                             ),
                             #money of the yesterday
                             BoxComponent(
@@ -119,7 +114,7 @@ def handle_text_message(event):
                                 contents = [
                                     TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
                                     TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
-                                ]
+                                ],
                             ),
                             #money of the today
                             BoxComponent(
@@ -127,9 +122,9 @@ def handle_text_message(event):
                                 contents = [
                                     TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
                                     TextComponent(text = 0+'円',size = 'sm',flex = 5,color = '#111111')
-                                ]
+                                ],
                             )
-                        ]
+                        ],
                     ),
                     SeparatorComponent(),
                     #total money
@@ -138,10 +133,10 @@ def handle_text_message(event):
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
                             TextComponent(text = str(total)+'円',size = 'sm',flex = 5,color = '#111111')
-                        ]
-                    ),
-                ]
-            )
+                        ],
+                    )
+                ],
+            ),
         )
         message = FlexSendMessage(alt_text = "hello", contents = bubble)
         line_bot_api.reply_message(
