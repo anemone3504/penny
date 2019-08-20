@@ -102,7 +102,7 @@ def handle_text_message(event):
                         margin = 'lg',
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = str(total) + '円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
@@ -188,3 +188,5 @@ def insert_column(value):
     sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
     with conn.cursor() as cur:
         cur.execute(sql)
+if __name__ == "__main__":
+    app.run()
