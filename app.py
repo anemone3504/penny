@@ -59,7 +59,7 @@ def handle_text_message(event):
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
         #DBにアクセスしてデータを取得する
-        sql = f"SELECT updated_at, SUM(value) FROM record WHERE updated_at > {purpose_date} GROUP BY updated_at ORDER BY updated_at ASC;"#GROUP BY とかはご自由に。
+        sql = f"SELECT updated_at, SUM(value) FROM record WHERE updated_at > '2019-08-20' GROUP BY updated_at ORDER BY updated_at ASC;"#GROUP BY とかはご自由に。
         with conn.cursor() as cur:
             cur.execute(sql) #executeメソッドでクエリを実行。
             results = cur.fetchall()  #fetchall
