@@ -49,7 +49,7 @@ def callback():
 
     return 'OK'
 
-handler.add(PostbackEvent)
+@handler.add(PostbackEvent)
 def handle_postback(event):
     #今日の日付データを取得
     x = datetime.date.today()
