@@ -21,6 +21,7 @@ from linebot.models import (
     TextComponent, SpacerComponent, IconComponent, ButtonComponent,
     SeparatorComponent, QuickReply, QuickReplyButton
 )
+from dateutil.relativedelta import relativedelta
 import os
 import datetime
 import psycopg2
@@ -48,21 +49,27 @@ def callback():
 
     return 'OK'
 
-#テキストメッセージが送られたときのイベント
-@handler.add(MessageEvent, message=TextMessage)
-def handle_text_message(event):
-    text = event.message.text
-    #1週間前の日付データを取得
+handler.add(PostbackEvent)
+def handle_postback(event):
+    #今日の日付データを取得
     x = datetime.date.today()
-    purpose_date = x - datetime.timedelta(weeks = 1)
-    purpose_date = purpose_date.isoformat()
-    #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
-    if text == '貯金額':
+
+    #DBにアクセスして累計貯金額を取得
+    sql = "SELECT SUM(value) FROM record"
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        total_results = cur.fetchall()
+
+    if event.postback.data == '1週間':
+        #1週間前の日付を取得
+        purpose_date = x - datetime.timedelta(weeks = 1)
+        purpose_date = purpose_date.isoformat()
+
         #DBにアクセスしてデータを取得する
         sql = f"SELECT updated_at, SUM(value) FROM record WHERE updated_at > '{purpose_date}' GROUP BY updated_at ORDER BY updated_at ASC;"#GROUP BY とかはご自由に。
         with conn.cursor() as cur:
             cur.execute(sql) #executeメソッドでクエリを実行。
-            results = cur.fetchall()  #fetchall
+            one_week_results = cur.fetchall()  #fetchall
         #results は 以下のようなデータフォーマットである.
         #[(1行目の1列目の属性,1行目の2列目の属性,...,1行目のn列目の属性),(2行目の1列目の属性,...,2行目のn列目の属性),...,(m行目の1列目,...,m行目のn列目)]
         #そして、m行目のn列目のアクセスしたい場合は
@@ -93,7 +100,7 @@ def handle_text_message(event):
                     BoxComponent(
                         layout = 'vertical',
                         margin = 'lg',
-                        contents = contentsGenerator.gen(len(results),results)
+                        contents = contentsGenerator.gen(len(one_week_results),one_week_results)
                     ),
                     SeparatorComponent(margin = 'lg'),
                     #total money
@@ -101,26 +108,185 @@ def handle_text_message(event):
                         layout = 'baseline',
                         margin = 'lg',
                         contents = [
-                            TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = '累計貯金額',size = 'sm',flex = 1,color = '#555555'),
+                            TextComponent(text = str(total_results[0][0])'円',size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
             ),
         )
-        message = FlexSendMessage(alt_text = "hello", contents = bubble)
+        message = FlexSendMessage(alt_text = "1週間の貯金額", contents = bubble)
         line_bot_api.reply_message(
             event.reply_token,
             message
+                quick_reply = QuickReply(
+                    items = [
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                        ),
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                        ),
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                        )
+                    ]
+                )
         )
 
+    elif event.postback.data == '1ヶ月':
+        #1ヶ月前の日付を取得
+        purpose_date = x - relativedelta(months = 1)
+        purpose_date = purpose_date.isoformat()
 
+        #DBにアクセスしてデータを取得
+        sql = f"SELECT SUM(value) FROM record WHERE updated_at > '{purpose_date}';"#GROUP BY とかはご自由に。
+        with conn.cursor() as cur:
+            cur.execute(sql) #executeメソッドでクエリを実行。
+            one_month_results = cur.fetchall()
+        bubble = BubbleContainer(
+            #左から右に文章が進むように設定
+            direction = 'ltr',
+            body = BoxComponent(
+                layout = 'vertical',
+                contents = [
+                    #title
+                    TextComponent(text = '1ヶ月の貯金額',weight = 'bold',size = 'xxl'),
+                    SeparatorComponent(margin = 'lg'),
+                    #three days money
+                    BoxComponent(
+                        layout = 'vertical',
+                        margin = 'lg',
+                        contents = [
+                            BoxComponent(
+                                layout = 'baseline',
+                                contents = [
+                                    TextComponent(text = '今月',size = 'xl',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(one_month_results[0][0]) + '円',size = 'xl',align = 'end',color = '#111111')
+                                ]
+                            )
+                        ]
+                    ),
+                    SeparatorComponent(margin = 'lg'),
+                    #total money
+                    BoxComponent(
+                        layout = 'baseline',
+                        margin = 'lg',
+                        contents = [
+                            TextComponent(text = '累計貯金額',size = 'sm',flex = 1,color = '#555555'),
+                            TextComponent(text = str(total_results[0][0])'円',size = 'sm',align = 'end',color = '#111111')
+                        ],
+                    )
+                ],
+            ),
+        )
+        message = FlexSendMessage(alt_text = "1ヶ月の貯金額", contents = bubble)
+        line_bot_api.reply_message(
+            event.reply_token,
+            message,
+            quick_reply = QuickReply(
+                items = [
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                    )
+                ]
+            )
+        )
+
+    elif event.postback.data == '1年':
+        #1年前の日付を取得
+        purpose_date = x - relativedelta(years = 1)
+        purpose_date = purpose_date.isoformat()
+
+        #DBにアクセスしてデータを取得
+        sql = f"SELECT SUM(value) FROM record WHERE updated_at > '{purpose_date}';"#GROUP BY とかはご自由に。
+        with conn.cursor() as cur:
+            cur.execute(sql) #executeメソッドでクエリを実行。
+            one_year_results = cur.fetchall()
+        bubble = BubbleContainer(
+            #左から右に文章が進むように設定
+            direction = 'ltr',
+            body = BoxComponent(
+                layout = 'vertical',
+                contents = [
+                    #title
+                    TextComponent(text = '1年間の貯金額',weight = 'bold',size = 'xxl'),
+                    SeparatorComponent(margin = 'lg'),
+                    #three days money
+                    BoxComponent(
+                        layout = 'vertical',
+                        margin = 'lg',
+                        contents = [
+                            BoxComponent(
+                                layout = 'baseline',
+                                contents = [
+                                    TextComponent(text = '今年',size = 'xl',flex = 1,color = '#555555'),
+                                    TextComponent(text = str(one_year_results[0][0]) + '円',size = 'xl',align = 'end',color = '#111111')
+                                ]
+                            )
+                        ]
+                    ),
+                    SeparatorComponent(margin = 'lg'),
+                    #total money
+                    BoxComponent(
+                        layout = 'baseline',
+                        margin = 'lg',
+                        contents = [
+                            TextComponent(text = '累計貯金額',size = 'sm',flex = 1,color = '#555555'),
+                            TextComponent(text = str(total_results[0][0])'円',size = 'sm',align = 'end',color = '#111111')
+                        ],
+                    )
+                ],
+            ),
+        )
+        message = FlexSendMessage(alt_text = "1年の貯金額", contents = bubble)
+        line_bot_api.reply_message(
+            event.reply_token,
+            message,
+            quick_reply = QuickReply(
+                items = [
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                    )
+                ]
+            )
+        )
+
+#テキストメッセージが送られたときのイベント
+@handler.add(MessageEvent, message=TextMessage)
+def handle_text_message(event):
+    text = event.message.text
     #ユーザーからヘルプを表示してほしいとメッセージが送られたときのイベント
     elif text == 'ヘルプ':
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text = '貯金額が知りたい。\n→「貯金額」と送信する。',
+                text = '俺からしてやれることは何もない。',
+                quick_reply = QuickReply(
+                    items = [
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                        ),
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                        ),
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1年分の貯金額",data = "1年")
+                        )
+                    ]
+                )
             )
         )
 
@@ -129,6 +295,19 @@ def handle_text_message(event):
             event.reply_token,
             TextSendMessage(
                 text = 'ごめんなさい。\nそのメッセージに対応する返信は用意されていません。\n対応しているメッセージについては、「ヘルプ」とメッセージを送って参照してください。',
+                quick_reply = QuickReply(
+                    items = [
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                        ),
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                        ),
+                        QuickReplyButton(
+                            action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                        )
+                    ]
+                )
             )
         )
 
@@ -139,6 +318,19 @@ def handle_other_message(event):
         event.reply_token,
         TextSendMessage(
             text = 'ごめんなさい。\nこのアカウントはユーザー様とテキストメッセージを使ってやり取りを行うアカウントです。\n対応しているメッセージについては、「ヘルプ」とメッセージを送って参照してください。',
+            quick_reply = QuickReply(
+                items = [
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                    )
+                ]
+            )
         )
     )
 #友達追加したときのイベント
