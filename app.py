@@ -121,7 +121,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = 0+'円',size = 'sm',flex = 5,color = '#111111')
+                                    TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
                                 ],
                             )
                         ],
@@ -132,7 +132,7 @@ def handle_text_message(event):
                         layout = 'baseline',
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = str(total)+'円',size = 'sm',flex = 5,color = '#111111')
+                            TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
                         ],
                     )
                 ],
