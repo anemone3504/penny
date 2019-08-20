@@ -269,7 +269,7 @@ def handle_postback(event):
 def handle_text_message(event):
     text = event.message.text
     #ユーザーからヘルプを表示してほしいとメッセージが送られたときのイベント
-    elif text == 'ヘルプ':
+    if text == 'ヘルプ':
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
