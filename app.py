@@ -55,7 +55,7 @@ def handle_text_message(event):
 
     #日付型→文字列型
 
-    #dby、yd、td、totalの定義
+    #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額 の定義
     dby = 0
     yd = 0
     td = 0
@@ -85,7 +85,12 @@ def handle_text_message(event):
             # 属性:updated_at date型 //日日の情報のみが含まれている。時刻に関する情報は含まれていない。
         # )
 
-        #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額
+        #dby_str=一昨日の文字列型、yd_str=昨日の文字列型、td_str=今日の文字列型、total_str=合計貯金額の文字列型
+        dby_str = str(dby) + '円'
+        yd_str = str(yd) + '円'
+        td_str = str(td) + '円'
+        total = str(total) + '円'
+
         bubble = BubbleContainer(
             #左から右に文章が進むように設定
             direction = 'ltr',
@@ -104,8 +109,8 @@ def handle_text_message(event):
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
-                                    TextComponent(text = '一昨日',size = 'sm',flex = 0,color = '#555555'),
-                                    TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
+                                    TextComponent(text = dby_str,size = 'sm',align = 'end',color = '#111111')
                                 ],
                             ),
                             #money of the yesterday
@@ -113,7 +118,7 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = yd_str,size = 'sm',align = 'end',color = '#111111')
                                 ],
                             ),
                             #money of the today
@@ -121,19 +126,19 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
+                                    TextComponent(text = td_str,size = 'sm',align = 'end',color = '#111111')
                                 ],
                             )
                         ],
                     ),
-                    SeparatorComponent(),
+                    SeparatorComponent(margin = 'lg'),
                     #total money
                     BoxComponent(
                         layout = 'baseline',
                         margin = 'lg',
                         contents = [
                             TextComponent(text = '合計貯金額',size = 'sm',flex = 1,color = '#555555'),
-                            TextComponent(text = '0円',size = 'sm',align = 'end',color = '#111111')
+                            TextComponent(text = total_str,size = 'sm',align = 'end',color = '#111111')
                         ],
                     )
                 ],
