@@ -24,6 +24,7 @@ from linebot.models import (
 import os
 import datetime
 import psycopg2
+import contentsGenerator
 
 #アクセスキーの取得
 app = Flask(__name__)
@@ -51,27 +52,20 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text
-    #日付型で日付データを取得
-
-    #日付型→文字列型
-
-
+    #1週間前の日付データを取得
+    x = datetime.date.today()
+    purpose_date = x - datetime.timedelta(weeks = 1)
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
-        #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額 の定義
-        dby = 0
-        yd = 0
-        td = 0
-        total = 0
         #DBにアクセスしてデータを取得する
-        #sql = "SELECT SUM(value) FROM;"#GROUP BY とかはご自由に。
-        #with conn.cursor() as cur:
-        #    cur.execute(sql) #executeメソッドでクエリを実行。
-        #    results = cur.fetchall()  #fetchall
+        sql = f"SELECT updated_at, SUM(value) FROM record WHERE updated_at > {purpose_date} GROUP BY updated_at ORDER BY updated_at ASC;"#GROUP BY とかはご自由に。
+        with conn.cursor() as cur:
+            cur.execute(sql) #executeメソッドでクエリを実行。
+            results = cur.fetchall()  #fetchall
         #results は 以下のようなデータフォーマットである.
         #[(1行目の1列目の属性,1行目の2列目の属性,...,1行目のn列目の属性),(2行目の1列目の属性,...,2行目のn列目の属性),...,(m行目の1列目,...,m行目のn列目)]
         #そして、m行目のn列目のアクセスしたい場合は
-        #results[m][n] で可能である。
+        #results[m-1][n-1] で可能である。
 
         #こういうのも便利かも？
         #for column in cur.ferchall():
@@ -85,12 +79,6 @@ def handle_text_message(event):
             # 属性:updated_at date型 //日日の情報のみが含まれている。時刻に関する情報は含まれていない。
         # )
 
-        #dby_str=一昨日の文字列型、yd_str=昨日の文字列型、td_str=今日の文字列型、total_str=合計貯金額の文字列型
-        dby_str = str(dby) + '円'
-        yd_str = str(yd) + '円'
-        td_str = str(td) + '円'
-        total_str = str(total) + '円'
-
         bubble = BubbleContainer(
             #左から右に文章が進むように設定
             direction = 'ltr',
@@ -98,38 +86,13 @@ def handle_text_message(event):
                 layout = 'vertical',
                 contents = [
                     #title
-                    TextComponent(text = '3日間の貯金額',weight = 'bold',size = 'xxl'),
+                    TextComponent(text = '1週間の貯金額',weight = 'bold',size = 'xxl'),
                     SeparatorComponent(margin = 'lg'),
                     #three days money
                     BoxComponent(
                         layout = 'vertical',
                         margin = 'lg',
-                        contents = [
-                            #money of the day before yesterday
-                            BoxComponent(
-                                layout = 'baseline',
-                                contents = [
-                                    TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = str(dby) + '円',size = 'sm',align = 'end',color = '#111111')
-                                ],
-                            ),
-                            #money of the yesterday
-                            BoxComponent(
-                                layout = 'baseline',
-                                contents = [
-                                    TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = str(yd) + '円',size = 'sm',align = 'end',color = '#111111')
-                                ],
-                            ),
-                            #money of the today
-                            BoxComponent(
-                                layout = 'baseline',
-                                contents = [
-                                    TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = str(td) + '円',size = 'sm',align = 'end',color = '#111111')
-                                ],
-                            )
-                        ],
+                        contents = contentsGenerator.gen(len(results),results)
                     ),
                     SeparatorComponent(margin = 'lg'),
                     #total money
