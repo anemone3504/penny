@@ -118,20 +118,20 @@ def handle_postback(event):
         message = FlexSendMessage(alt_text = "1週間の貯金額", contents = bubble)
         line_bot_api.reply_message(
             event.reply_token,
-            message
-                quick_reply = QuickReply(
-                    items = [
-                        QuickReplyButton(
-                            action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
-                        ),
-                        QuickReplyButton(
-                            action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
-                        ),
-                        QuickReplyButton(
-                            action = PostbackAction(label = "1年分の貯金額",data = "1年分")
-                        )
-                    ]
-                )
+            message,
+            quick_reply = QuickReply(
+                items = [
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                    ),
+                    QuickReplyButton(
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                    )
+                ]
+            )
         )
 
     elif event.postback.data == '1ヶ月':
