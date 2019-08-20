@@ -209,6 +209,10 @@ def handle_unfollow(event):
 conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
 conn.autocommit = True
 
+@app.route('/')
+def confirm():
+    return "penny はしっかり稼働中だよ。"
+
 @app.route('/insert/',methods=['POST'])
 def insert():
     value = request.form['value']#大括弧なのに注意。
