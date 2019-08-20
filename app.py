@@ -91,7 +91,7 @@ def handle_text_message(event):
         # )
 
         #dby=一昨日のデータ、yd=昨日のデータ、td=今日のデータ、total=合計貯金額
-        buble = BubbleContainer(
+        bubble = BubbleContainer(
             #左から右に文章が進むように設定
             direction = 'ltr',
             body = BoxComponent(
@@ -110,26 +110,26 @@ def handle_text_message(event):
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '一昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = str(dby)+'円',size = 'sm',flex = 5,color = '#111111')
-                                ],
+                                    TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
+                                ]
                             ),
                             #money of the yesterday
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '昨日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = str(yd)+'円',size = 'sm',flex = 5,color = '#111111')
-                                ],
+                                    TextComponent(text = '0円',size = 'sm',flex = 5,color = '#111111')
+                                ]
                             ),
                             #money of the today
                             BoxComponent(
                                 layout = 'baseline',
                                 contents = [
                                     TextComponent(text = '今日',size = 'sm',flex = 1,color = '#555555'),
-                                    TextComponent(text = str(td)+'円',size = 'sm',flex = 5,color = '#111111')
-                                ],
-                            ),
-                        ],
+                                    TextComponent(text = 0+'円',size = 'sm',flex = 5,color = '#111111')
+                                ]
+                            )
+                        ]
                     ),
                     SeparatorComponent(),
                     #total money
@@ -141,7 +141,7 @@ def handle_text_message(event):
                         ]
                     ),
                 ]
-            ),
+            )
         )
         message = FlexSendMessage(alt_text = "hello", contents = bubble)
         line_bot_api.reply_message(
