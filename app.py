@@ -55,6 +55,7 @@ def handle_text_message(event):
     #1週間前の日付データを取得
     x = datetime.date.today()
     purpose_date = x - datetime.timedelta(weeks = 1)
+    purpose_date = purpose_date.isoformat()
     #ユーザーから貯金額に関するメッセージが贈られてきた時のイベント
     if text == '貯金額':
         #DBにアクセスしてデータを取得する
