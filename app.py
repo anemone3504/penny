@@ -60,6 +60,23 @@ def handle_postback(event):
         cur.execute(sql)
         total_results = cur.fetchall()
 
+    b_message =TextSendMessage(
+        text = "貯金額を確認したいときは下のボタンを押してちょうだい。",
+        quick_reply = QuickReply(
+            items = [
+                QuickReplyButton(
+                    action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                ),
+                QuickReplyButton(
+                    action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                ),
+                QuickReplyButton(
+                    action = PostbackAction(label = "1年分の貯金額",data = "1年")
+                )
+            ]
+        )
+    )
+
     if event.postback.data == '1週間':
         #1週間前の日付を取得
         purpose_date = x - datetime.timedelta(weeks = 1)
@@ -116,9 +133,10 @@ def handle_postback(event):
             ),
         )
         message = FlexSendMessage(alt_text = "1週間分の貯金額", contents = bubble)
+        messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
-            message
+            messages
         )
 
     elif event.postback.data == '1ヶ月':
@@ -168,9 +186,10 @@ def handle_postback(event):
             ),
         )
         message = FlexSendMessage(alt_text = "1ヶ月分の貯金額", contents = bubble)
+        messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
-            message
+            messages
         )
 
     elif event.postback.data == '1年':
@@ -220,30 +239,11 @@ def handle_postback(event):
             ),
         )
         message = FlexSendMessage(alt_text = "1年間の貯金額", contents = bubble)
+        messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
-            message
+            messages
         )
-        
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            text = '次は何が見たい？',
-            quick_reply = QuickReply(
-                items = [
-                    QuickReplyButton(
-                        action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
-                    ),
-                    QuickReplyButton(
-                        action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
-                    ),
-                    QuickReplyButton(
-                        action = PostbackAction(label = "1年分の貯金額",data = "1年")
-                    )
-                ]
-            )
-        )
-    )
 
 #テキストメッセージが送られたときのイベント
 @handler.add(MessageEvent, message=TextMessage)
@@ -254,7 +254,7 @@ def handle_text_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text = '俺からしてやれることは何もない。',
+                text = '確認したい貯金額のボタンをタップしてちょうだい。',
                 quick_reply = QuickReply(
                     items = [
                         QuickReplyButton(
@@ -275,7 +275,7 @@ def handle_text_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text = 'ごめんなさい。\nそのメッセージに対応する返信は用意されていません。\n対応しているメッセージについては、「ヘルプ」とメッセージを送って参照してください。',
+                text = 'ごめんなさいね。\nそのメッセージに対応する返信は用意されてないのよ。\n対応しているメッセージについては、「ヘルプ」とメッセージを送って参照してちょうだいね。',
                 quick_reply = QuickReply(
                     items = [
                         QuickReplyButton(
@@ -285,7 +285,7 @@ def handle_text_message(event):
                             action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                         ),
                         QuickReplyButton(
-                            action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                            action = PostbackAction(label = "1年分の貯金額",data = "1年")
                         )
                     ]
                 )
@@ -298,7 +298,7 @@ def handle_other_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
-            text = 'ごめんなさい。\nこのアカウントはユーザー様とテキストメッセージを使ってやり取りを行うアカウントです。\n対応しているメッセージについては、「ヘルプ」とメッセージを送って参照してください。',
+            text = 'ごめんなさいね。\nこのアカウントはユーザー様とテキストメッセージを使ってやり取りを行うアカウントなのよ。\n対応しているメッセージについては、「ヘルプ」とメッセージを送って参照してちょうだいね。',
             quick_reply = QuickReply(
                 items = [
                     QuickReplyButton(
@@ -308,7 +308,7 @@ def handle_other_message(event):
                         action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                     ),
                     QuickReplyButton(
-                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年")
                     )
                 ]
             )
@@ -321,7 +321,7 @@ def handle_follow(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
-            text = "友達追加ありがとう！\n貯金額を確認したいときは下のボタンを押してね",
+            text = "友達追加ありがとうね。\n貯金額を確認したいときは下のボタンを押してちょうだい。",
             quick_reply = QuickReply(
                 items = [
                     QuickReplyButton(
@@ -331,7 +331,7 @@ def handle_follow(event):
                         action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                     ),
                     QuickReplyButton(
-                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年")
                     )
                 ]
             )
@@ -351,15 +351,83 @@ conn.autocommit = True
 def confirm():
     return "penny はしっかり稼働中だよ。"
 
+@app.route('/angryCall/')
+def angryCall():
+    #DBにアクセスして最新の貯金1件を取得
+    sql = "SELECT id FROM users;"
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        userID = cur.fetchall()
+
+    IDs = []
+    for user in userID:
+        IDs.append(user[0])
+
+    for id in IDs:
+        line_bot_api.push_message(
+            id,[
+                TextSendMessage(
+                    text = 'もう3日貯金してないわよ、腹ペコよ。',
+                    quick_reply = QuickReply(
+                        items = [
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                            ),
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                            ),
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1年分の貯金額",data = "1年")
+                            )
+                        ]
+                    )
+                )
+            ]
+        )
+
 @app.route('/insert/',methods=['POST'])
 def insert():
     value = request.form['value']#大括弧なのに注意。
     insert_column(value)
+
+    #DBにアクセスして最新の貯金1件を取得
+    sql = "SELECT id FROM users;"
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        userID = cur.fetchall()
+
+    IDs = []
+    for user in userID:
+        IDs.append(user[0])
+
+    for id in IDs:
+        line_bot_api.push_message(
+            id,[
+                TextSendMessage(
+                    text = f'{value}円貯金してくれてありがとうね。\n嬉しいわ。',
+                    quick_reply = QuickReply(
+                        items = [
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                            ),
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                            ),
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1年分の貯金額",data = "1年")
+                            )
+                        ]
+                    )
+                )
+            ]
+        )
+
     return "Insert done." #Noneを返すとstatus code が500になる。
 
 def insert_column(value):
     sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
     with conn.cursor() as cur:
         cur.execute(sql)
+
 if __name__ == "__main__":
     app.run()
