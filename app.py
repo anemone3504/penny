@@ -27,6 +27,9 @@ import datetime
 import psycopg2
 import contentsGenerator
 
+conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
+conn.autocommit = True
+
 #アクセスキーの取得
 app = Flask(__name__)
 #Botの認証
@@ -317,7 +320,16 @@ def handle_other_message(event):
 #友達追加したときのイベント
 @handler.add(FollowEvent)
 def handle_follow(event):
-    UserID = event.source.user_id
+    #取得したユーザーIDをDBに格納する
+    userID = event.source.user_id
+    #display_nameを取得する。
+    profile = line_bot_api.get_profile(userID)
+    name = profile.display_name
+
+    sql = f"INSERT INTO users VALUES ('{userID}','{name}');"
+    with conn.cursor() as cur:
+        cur.execute(sql)
+
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
@@ -341,11 +353,13 @@ def handle_follow(event):
 #ブロックされたときのイベント
 @handler.add(UnfollowEvent)
 def handle_unfollow(event):
-    UseID = event.source.user_id
+    userID = event.source.user_id
     #UserIDをデータベースから削除する
+    sql = f"DELETE FROM users WHERE id = '{userID}';"
+    with conn.cursor() as cur:
+        cur.execute(sql)
 
-conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
-conn.autocommit = True
+
 
 @app.route('/')
 def confirm():
