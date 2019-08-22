@@ -63,7 +63,22 @@ def handle_postback(event):
         cur.execute(sql)
         total_results = cur.fetchall()
 
-    b_message =
+    b_message =TextSendMessage(
+        text = "友達追加ありがとう！\n貯金額を確認したいときは下のボタンを押してね",
+        quick_reply = QuickReply(
+            items = [
+                QuickReplyButton(
+                    action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                ),
+                QuickReplyButton(
+                    action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                ),
+                QuickReplyButton(
+                    action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                )
+            ]
+        )
+    )
 
     if event.postback.data == '1週間':
         #1週間前の日付を取得
@@ -327,7 +342,7 @@ def handle_follow(event):
     profile = line_bot_api.get_profile(userID)
     name = profile.display_name
 
-    sql = f"INSERT INTO users (id,name) VALUES ('{userID}','{name}');"
+    sql = f"INSERT INTO users VALUES ('{userID}','{name}');"
     with conn.cursor() as cur:
         cur.execute(sql)
 
@@ -356,7 +371,7 @@ def handle_follow(event):
 def handle_unfollow(event):
     userID = event.source.user_id
     #UserIDをデータベースから削除する
-    sql = f"DELETE FROM users WHERE id = {userID};"
+    sql = f"DELETE FROM users WHERE id = '{userID}';"
     with conn.cursor() as cur:
         cur.execute(sql)
 
