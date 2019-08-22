@@ -319,7 +319,11 @@ def handle_other_message(event):
 def handle_follow(event):
     #取得したユーザーIDをDBに格納する
     userID = event.source.user_id
-    sql = f"INSERT INTO users (id,name) VALUES ({userID},1);"
+    #display_nameを取得する。
+    profile = line_bot_api.get_profile(userID)
+    name = profile.display_name
+
+    sql = f"INSERT INTO users (id,name) VALUES ({userID},{name});"
     with conn.cursor() as cur:
         cur.execute(sql)
 
@@ -348,7 +352,9 @@ def handle_follow(event):
 def handle_unfollow(event):
     userID = event.source.user_id
     #UserIDをデータベースから削除する
-
+    sql = f"DELETE FROM users WHERE id = {userID};"
+    with conn.cursor() as cur:
+        cur.execute(sql)
 
 
 conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
@@ -361,7 +367,7 @@ def confirm():
 @app.route('/angryCall/')
 def angryCall():
     #DBにアクセスして最新の貯金1件を取得
-    sql = "SELECT  FROM "
+    sql = "SELECT id FROM users WHERE"
     with conn.cursor() as cur:
         cur.execute(sql)
         userID = cur.fetchall()
