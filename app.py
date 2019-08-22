@@ -74,7 +74,7 @@ def handle_postback(event):
                     action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                 ),
                 QuickReplyButton(
-                    action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                    action = PostbackAction(label = "1年分の貯金額",data = "1年")
                 )
             ]
         )
@@ -288,7 +288,7 @@ def handle_text_message(event):
                             action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                         ),
                         QuickReplyButton(
-                            action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                            action = PostbackAction(label = "1年分の貯金額",data = "1年")
                         )
                     ]
                 )
@@ -311,7 +311,7 @@ def handle_other_message(event):
                         action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                     ),
                     QuickReplyButton(
-                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年")
                     )
                 ]
             )
@@ -343,7 +343,7 @@ def handle_follow(event):
                         action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                     ),
                     QuickReplyButton(
-                        action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                        action = PostbackAction(label = "1年分の貯金額",data = "1年")
                     )
                 ]
             )
@@ -391,7 +391,7 @@ def angryCall():
                                 action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
                             ),
                             QuickReplyButton(
-                                action = PostbackAction(label = "1年分の貯金額",data = "1年分")
+                                action = PostbackAction(label = "1年分の貯金額",data = "1年")
                             )
                         ]
                     )
