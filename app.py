@@ -319,7 +319,7 @@ def handle_other_message(event):
 def handle_follow(event):
     #取得したユーザーIDをDBに格納する
     userID = event.source.user_id
-    sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
+    sql = f"INSERT INTO users (ID,name) VALUES ({userID},1)"
     with conn.cursor() as cur:
         cur.execute(sql)
 
