@@ -224,7 +224,7 @@ def handle_postback(event):
             event.reply_token,
             message
         )
-        
+
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
@@ -254,7 +254,7 @@ def handle_text_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text = '俺からしてやれることは何もない。',
+                text = '確認したい貯金額のボタンをタップしてください。',
                 quick_reply = QuickReply(
                     items = [
                         QuickReplyButton(
@@ -317,7 +317,12 @@ def handle_other_message(event):
 #友達追加したときのイベント
 @handler.add(FollowEvent)
 def handle_follow(event):
-    UserID = event.source.user_id
+    #取得したユーザーIDをDBに格納する
+    userID = event.source.user_id
+    sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
+    with conn.cursor() as cur:
+        cur.execute(sql)
+
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
@@ -341,8 +346,10 @@ def handle_follow(event):
 #ブロックされたときのイベント
 @handler.add(UnfollowEvent)
 def handle_unfollow(event):
-    UseID = event.source.user_id
+    userID = event.source.user_id
     #UserIDをデータベースから削除する
+
+
 
 conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
 conn.autocommit = True
@@ -350,6 +357,20 @@ conn.autocommit = True
 @app.route('/')
 def confirm():
     return "penny はしっかり稼働中だよ。"
+
+@app.route('/angryCall/')
+def angryCall():
+    #DBにアクセスして最新の貯金1件を取得
+    sql = "SELECT  FROM "
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        userID = cur.fetchall()
+
+    line_bot_api.pushmessage(
+        reminder[0][0],[
+            TextSendMessage(text = 'もう3日貯金してないわよ、腹ペコよ。')
+        ]
+    )
 
 @app.route('/insert/',methods=['POST'])
 def insert():
