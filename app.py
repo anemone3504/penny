@@ -388,16 +388,21 @@ def confirm():
 @app.route('/angryCall/')
 def angryCall():
     #DBにアクセスして最新の貯金1件を取得
-    sql = "SELECT id FROM users WHERE name = 'takao';"
+    sql = "SELECT id FROM users;"
     with conn.cursor() as cur:
         cur.execute(sql)
         userID = cur.fetchall()
 
-    line_bot_api.pushmessage(
-        reminder[0][0],[
-            TextSendMessage(text = 'もう3日貯金してないわよ、腹ペコよ。')
-        ]
-    )
+    IDs = []
+    for user in userID:
+        IDs.append(user[0])
+
+    for id in IDs:
+        line_bot_api.push_message(
+            id,[
+                TextSendMessage(text = 'もう3日貯金してないわよ、腹ペコよ。')
+            ]
+        )
 
 @app.route('/insert/',methods=['POST'])
 def insert():
