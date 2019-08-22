@@ -63,6 +63,8 @@ def handle_postback(event):
         cur.execute(sql)
         total_results = cur.fetchall()
 
+    b_message =
+
     if event.postback.data == '1週間':
         #1週間前の日付を取得
         purpose_date = x - datetime.timedelta(weeks = 1)
@@ -121,7 +123,6 @@ def handle_postback(event):
         message = FlexSendMessage(alt_text = "1週間分の貯金額", contents = bubble)
         line_bot_api.reply_message(
             event.reply_token,
-            message
         )
 
     elif event.postback.data == '1ヶ月':
@@ -326,7 +327,7 @@ def handle_follow(event):
     profile = line_bot_api.get_profile(userID)
     name = profile.display_name
 
-    sql = f"INSERT INTO users (id,name) VALUES ({userID},{name});"
+    sql = f"INSERT INTO users (id,name) VALUES ('{userID}','{name}');"
     with conn.cursor() as cur:
         cur.execute(sql)
 
