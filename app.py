@@ -403,11 +403,45 @@ def angryCall():
 def insert():
     value = request.form['value']#大括弧なのに注意。
     insert_column(value)
+
+    #DBにアクセスして最新の貯金1件を取得
+    sql = "SELECT id FROM users;"
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        userID = cur.fetchall()
+
+    IDs = []
+    for user in userID:
+        IDs.append(user[0])
+
+    for id in IDs:
+        line_bot_api.push_message(
+            id,[
+                TextSendMessage(
+                    text = f'{value}円貯金してくれてありがとうね。\n嬉しいわ。',
+                    quick_reply = QuickReply(
+                        items = [
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1週間分の貯金額",data = "1週間")
+                            ),
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1ヶ月分の貯金額",data = "1ヶ月")
+                            ),
+                            QuickReplyButton(
+                                action = PostbackAction(label = "1年分の貯金額",data = "1年")
+                            )
+                        ]
+                    )
+                )
+            ]
+        )
+
     return "Insert done." #Noneを返すとstatus code が500になる。
 
 def insert_column(value):
     sql = "INSERT INTO record(value,updated_at) VALUES({},current_date)".format(value)
     with conn.cursor() as cur:
         cur.execute(sql)
+
 if __name__ == "__main__":
     app.run()
