@@ -192,7 +192,7 @@ def handle_postback(event):
         messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
-            message
+            messages
         )
 
     elif event.postback.data == '1年':
@@ -245,7 +245,7 @@ def handle_postback(event):
         messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
-            message
+            messages
         )
 
 #テキストメッセージが送られたときのイベント
