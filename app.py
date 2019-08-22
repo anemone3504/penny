@@ -136,8 +136,10 @@ def handle_postback(event):
             ),
         )
         message = FlexSendMessage(alt_text = "1週間分の貯金額", contents = bubble)
+        messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
+            messages
         )
 
     elif event.postback.data == '1ヶ月':
@@ -187,6 +189,7 @@ def handle_postback(event):
             ),
         )
         message = FlexSendMessage(alt_text = "1ヶ月分の貯金額", contents = bubble)
+        messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
             message
@@ -239,6 +242,7 @@ def handle_postback(event):
             ),
         )
         message = FlexSendMessage(alt_text = "1年間の貯金額", contents = bubble)
+        messages = [message,b_message]
         line_bot_api.reply_message(
             event.reply_token,
             message
@@ -384,7 +388,7 @@ def confirm():
 @app.route('/angryCall/')
 def angryCall():
     #DBにアクセスして最新の貯金1件を取得
-    sql = "SELECT id FROM users WHERE name;"
+    sql = "SELECT id FROM users WHERE name = 'takao';"
     with conn.cursor() as cur:
         cur.execute(sql)
         userID = cur.fetchall()
