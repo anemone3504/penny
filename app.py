@@ -27,6 +27,9 @@ import datetime
 import psycopg2
 import contentsGenerator
 
+conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
+conn.autocommit = True
+
 #アクセスキーの取得
 app = Flask(__name__)
 #Botの認証
@@ -357,8 +360,6 @@ def handle_unfollow(event):
         cur.execute(sql)
 
 
-conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
-conn.autocommit = True
 
 @app.route('/')
 def confirm():
@@ -367,7 +368,7 @@ def confirm():
 @app.route('/angryCall/')
 def angryCall():
     #DBにアクセスして最新の貯金1件を取得
-    sql = "SELECT id FROM users WHERE"
+    sql = "SELECT id FROM users WHERE name;"
     with conn.cursor() as cur:
         cur.execute(sql)
         userID = cur.fetchall()
