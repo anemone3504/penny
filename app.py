@@ -39,6 +39,44 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+rich_menu_to_create = RichMenu(
+    size = RichMenuSize(width = 1200,height = 405),
+    selected = False,
+    name = "penny's_rich_menu",
+    chat_bar_text = "貯金額の確認はこちらから",
+    areas = [
+        RichMenuArea(
+            bounds = RichMenuBounds(x=0,y=0,width=400,height=405),
+            action = PostbackAction(data = '1週間')
+        ),
+        RichMenuArea(
+            bounds = RichMenuBounds(x=400,y=0,width=400,height=405),
+            action = PostbackAction(data = '1ヶ月')
+        ),
+        RichMenuArea(
+            bounds = RichMenuBounds(x=800,y=0,width=400,height=405),
+            action = PostbackAction(data = '1年')
+        )
+    ]
+)
+rich_menu_id = line_bot_api.create_rich_menu(rich_menu = rich_menu_to_create)
+
+with open(../static/rich_penny.png) as f:
+    line_bot_api.set_rich_menu_image(rich_menu_id, image/png, f)
+
+#DBにアクセスして最新の貯金1件を取得
+sql = "SELECT id FROM users;"
+with conn.cursor() as cur:
+    cur.execute(sql)
+    userID = cur.fetchall()
+
+IDs = []
+for user in userID:
+    IDs.append(user[0])
+
+for id in IDs:
+    line_bot_api.link_rich_menu_to_user(id,rich_menu_id)
+
 @app.route("/callback",methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
