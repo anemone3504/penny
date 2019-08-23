@@ -27,6 +27,8 @@ import datetime
 import psycopg2
 import contentsGenerator
 
+base = os.path.dirname(os.path.abspath(__file__))
+
 conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
 conn.autocommit = True
 
@@ -61,7 +63,7 @@ rich_menu_to_create = RichMenu(
 )
 rich_menu_id = line_bot_api.create_rich_menu(rich_menu = rich_menu_to_create)
 
-with open(../static/rich_penny.png) as f:
+with open('../static/rich_penny.png') as f:
     line_bot_api.set_rich_menu_image(rich_menu_id, image/png, f)
 
 #DBにアクセスして最新の貯金1件を取得
