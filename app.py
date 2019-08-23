@@ -26,6 +26,7 @@ import os
 import datetime
 import psycopg2
 import contentsGenerator
+import random
 
 conn = psycopg2.connect('dbname=dd7kbsbiacro6l host=ec2-75-101-131-79.compute-1.amazonaws.com user=grkxppqvrlmwts password=2f92dae80cd0543e3b2c7af59c631e86ae7d2353b7f4e6a384213d6229e74674')
 conn.autocommit = True
@@ -399,8 +400,16 @@ def angryCall():
             ]
         )
 
+#貯金されたときのデータの格納とメッセージの送信を行う
 @app.route('/insert/',methods=['POST'])
 def insert():
+    thanks = [
+        '嬉しいわ。',
+        'お金はまだあるわよね？',
+        '明日もがんばりなさいよ。',
+        '今日はもうおしまいかしら？',
+        'まだ物足りないわね。',
+    ]
     value = request.form['value']#大括弧なのに注意。
     insert_column(value)
 
@@ -418,7 +427,7 @@ def insert():
         line_bot_api.push_message(
             id,[
                 TextSendMessage(
-                    text = f'{value}円貯金してくれてありがとうね。\n嬉しいわ。',
+                    text = f'{value}円貯金してくれてありがとうね、{random.choice(thanks)}',
                     quick_reply = QuickReply(
                         items = [
                             QuickReplyButton(
