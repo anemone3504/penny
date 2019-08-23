@@ -64,7 +64,7 @@ rich_menu_to_create = RichMenu(
 )
 rich_menu_id = line_bot_api.create_rich_menu(rich_menu = rich_menu_to_create)
 
-with open('../static/rich_penny.png') as f:
+with open('./static/rich_penny.png') as f:
     line_bot_api.set_rich_menu_image(rich_menu_id, image/png, f)
 
 #DBにアクセスして最新の貯金1件を取得
