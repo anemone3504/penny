@@ -19,7 +19,8 @@ from linebot.models import (
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent, BeaconEvent,
     FlexSendMessage, BubbleContainer, ImageComponent, BoxComponent,
     TextComponent, SpacerComponent, IconComponent, ButtonComponent,
-    SeparatorComponent, QuickReply, QuickReplyButton
+    SeparatorComponent, QuickReply, QuickReplyButton,
+    RichMenu, RichMenuSize, RichMenuArea
 )
 from dateutil.relativedelta import relativedelta
 import os
