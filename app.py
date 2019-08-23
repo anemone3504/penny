@@ -20,7 +20,7 @@ from linebot.models import (
     FlexSendMessage, BubbleContainer, ImageComponent, BoxComponent,
     TextComponent, SpacerComponent, IconComponent, ButtonComponent,
     SeparatorComponent, QuickReply, QuickReplyButton,
-    RichMenu, RichMenuSize, RichMenuArea
+    RichMenu, RichMenuSize, RichMenuArea, RichMenuBounds
 )
 from dateutil.relativedelta import relativedelta
 import os
